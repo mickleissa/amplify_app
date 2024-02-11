@@ -1,8 +1,8 @@
-variable "token" {
-  type        = string
-  description = "github token to connect github repo"
-  default     = "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"
-}
+# variable "token" {
+# #   type        = string
+# #   description = "github token to connect github repo"
+# #   default     = ""
+# # }
 
 variable "repository" {
   type        = string
@@ -33,4 +33,14 @@ variable "domain_name" {
 #   default     = "true"
 #   type        = string
 #   description = "Your build spec file contents. If not provided then it will use the `amplify.yml` at the root of your project / branch."
+# }
+
+# variable "basic_auth_username" {
+#   type        = string
+#   description = "The username to use for the basic auth configuration."
+# }
+
+# variable "basic_auth_password" {
+#   type        = string
+#   description = "The password to use for the basic auth configuration."
 # }

@@ -1,3 +1,7 @@
+# locals {
+#   basic_auth_creds = try(base64encode("${var.basic_auth_username}:${var.basic_auth_password}"), null)
+# }
+
 resource "aws_amplify_app" "amplify_app" {
   name       = var.app_name
   repository = var.repository
