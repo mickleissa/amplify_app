@@ -1,7 +1,7 @@
 variable "token" {
   type        = string
   description = "github token to connect github repo"
-  default     = "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"
+  default     = "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"
 }
 
 variable "repository" {
@@ -28,4 +28,9 @@ variable "domain_name" {
 #   default     = "awsamplifyapp.com"
   default     = "mickleissa.com"
   description = "AWS Amplify Domain Name"
+}
+variable "build_spec_content" {
+  default     = "true"
+  type        = string
+  description = "Your build spec file contents. If not provided then it will use the `amplify.yml` at the root of your project / branch."
 }
