@@ -1,38 +1,40 @@
-# resource "aws_amplify_app" "power_of_math2" {
-#   name       = "power_of_math2"
-#   repository = "https://github.com/mickleissa/amplify_app"
-#   access_token = "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"
-#     # enable_basic_auth      = true
-# #   basic_auth_credentials = base64encode("mickleissa:Mickleissa381986@")
+resource "aws_amplify_app" "amplify_app" {
+  name       = var.app_name
+  repository = var.repository
+  oauth_token = var.token 
+  build_spec = <<-EOT
+  true
+  EOT
+# build_spec               = var.build_spec_content != "" ? var.build_spec_content : null
+  enable_auto_branch_creation = true
 
-#   # The default build_spec added by the Amplify Console for React.
-#   build_spec = <<-EOT
-#     version: 0.1
-#     frontend:
-#       phases:
-#         preBuild:
-#           commands:
-#             - yarn install
-#         build:
-#           commands:
-#             - yarn run build
-#       artifacts:
-#         baseDirectory: build
-#         files:
-#           - '**/*'
-#       cache:
-#         paths:
-#           - node_modules/**/*
-#   EOT
+  # The default patterns added by the Amplify Console.
+  auto_branch_creation_patterns = [
+    "*",
+    "*/**",
+  ]
 
-#   # The default rewrites and redirects added by the Amplify Console.
-#   custom_rule {
-#     source = "/<*>"
-#     status = "404"
-#     target = "/index.html"
-#   }
+  auto_branch_creation_config {
+    # Enable auto build for the created branch.
+    enable_auto_build = true
+  }
+#    iam_service_role_arn     = aws_iam_role.amplify_build_role.arn
+}
+resource "aws_amplify_branch" "amplify_branch" {
+  app_id      = aws_amplify_app.amplify_app.id
+  branch_name = var.branch_name
+  enable_auto_build = true
+    stage = "PRODUCTION"
 
-#   environment_variables = {
-#     ENV = "test"
-#   }
-# }
+}
+resource "aws_amplify_domain_association" "domain_association" {
+  app_id      = aws_amplify_app.amplify_app.id
+  domain_name = var.domain_name
+  wait_for_verification = false
+
+  sub_domain {
+    branch_name = aws_amplify_branch.amplify_branch.branch_name
+    prefix      = var.branch_name
+  }
+
+}
